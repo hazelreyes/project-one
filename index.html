@@ -93,24 +93,31 @@
             .trim();
           console.log(cityName);
 
-          var myurl =
-            "https://api.yelp.com/v3/businesses/search?term=restaurants&location=chicago" 
+        
 
 
-
-          $.ajax({
-            url: myurl,
-            method: "GET",
-            dataType: "jsonp",
-           // data: { term: "restaurant", city: "irvine" } ,
-            error: function (error) {
-            console.log(error);
-            }
+            $.ajax({
+        url:
+          "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search",
+        method: "GET",
+        error: function(error) {
+          console.log("error", error);
+        },
+        headers: {
+          Authorization:
+            "Bearer 777OVHyUQXu4MD9WPwXQ3dub9jGslCwGt185TfYEQF6JoBa7tr7kjVe7OvbcNzwp2mY8k3JkODi2curLYOzJsG5dKxmQD8SzDYABjKEzUGC8i3Bk4vXHaU6P5G5DXnYx"
+        },
+        dataType: "json",
+        data: { term: "restaurant", location: "Irvine, CA" }
+     
             
             // callback is not necessary
           }).then(function(response) {
+
+            console.log(response);
+            
             // Grab the results from the API JSON return
-            var totalresults = data.total;
+            var totalresults = response.total;
             // If our results are greater than 0, continue
             if (totalresults > 0) {
               // Display a header on the page with the number of results
