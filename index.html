@@ -94,15 +94,20 @@
           console.log(cityName);
 
           var myurl =
-            "https://api.yelp.com/v3/businesses/matches?term=" +
-            cityName +
-            "&match_threshold=none&limit=10";
+            "https://api.yelp.com/v3/businesses/search?term=restaurants&location=chicago" 
+
+
 
           $.ajax({
             url: myurl,
             method: "GET",
             dataType: "jsonp",
-            data: { term: "restaurant", city: "irvine" } // callback is not necessary
+           // data: { term: "restaurant", city: "irvine" } ,
+            error: function (error) {
+            console.log(error);
+            }
+            
+            // callback is not necessary
           }).then(function(response) {
             // Grab the results from the API JSON return
             var totalresults = data.total;
