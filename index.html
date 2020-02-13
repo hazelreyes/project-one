@@ -41,9 +41,10 @@
       <i class="material-icons right">send</i>
     </button>
   </div>
-  <div id="youTubeArea"></div>
+
   <div id="yelpArea"></div>
-  <div id="listArea"></div>
+  <div id="youTubeArea"></div>
+  <div id="itineraryArea"></div>
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery.js"></script>
   <!--JavaScript at end of body for optimized loading-->
@@ -65,22 +66,16 @@
       //Firebase initialize
       firebase.initializeApp(firebaseConfig);
 
-      //Initial values
-
-      var rating = "";
-      var restaurantName = "";
-      var cityName = "";
 
       //Capture Button Click
       $("#submitBtn").on("click", function (event) {
         event.preventDefault();
 
+        $("#yelpArea").html("");
+
         cityName = $("#city-input")
           .val()
           .trim();
-        console.log(cityName);
-
-
 
 
         $.ajax({
@@ -95,7 +90,7 @@
               "Bearer 777OVHyUQXu4MD9WPwXQ3dub9jGslCwGt185TfYEQF6JoBa7tr7kjVe7OvbcNzwp2mY8k3JkODi2curLYOzJsG5dKxmQD8SzDYABjKEzUGC8i3Bk4vXHaU6P5G5DXnYx"
           },
           dataType: "json",
-          data: { term: "restaurant", location: "Irvine, CA" }
+          data: { term: "restaurant", location: cityName, limit: "5"}
 
 
           // callback is not necessary
@@ -112,8 +107,6 @@
             // Itirate through the JSON array of 'businesses' which was returned by the API
             $.each(response.businesses, function (i, item) {
               // Store each business's object in a variable
-              var id = item.id;
-              var alias = item.alias;
               var phone = item.display_phone;
               var image = item.image_url;
               var name = item.name;
@@ -125,17 +118,11 @@
               var zipcode = item.location.zip_code;
               // Append our result into our page
               $("#yelpArea").append(
-                '<div id="' +
-                id +
-                '" style="margin-top:50px;margin-bottom:50px;"><img src="' +
+                '<div id="yelpInfo" style="margin-top:50px;margin-bottom:50px;"><img src="' +
                 image +
                 '" style="width:200px;height:150px;"><br>We found <b>' +
                 name +
-                "</b> (" +
-                alias +
-                ")<br>Business ID: " +
-                id +
-                "<br> Located at: " +
+                "</b><br> Located at: " +
                 address +
                 " " +
                 city +
@@ -159,23 +146,23 @@
         });
 
         $.ajax({
-            type: 'GET',
-            url: 'https://www.googleapis.com/youtube/v3/search',
-            data: {
-              key: 'AIzaSyA5QGk0Aszi91ubsph31l_NmGzzct6vL9s',
-              q: "cats",
-              part: 'snippet',
-              maxResults: 1,
-              type: 'video',
-              videoEmbeddable: true,
-            },
-            error: function (response) {
-              console.log("Request Failed");
-            }
-            }).then(function (response) {
-            console.log(response);
-            });
-      
+          type: 'GET',
+          url: 'https://www.googleapis.com/youtube/v3/search',
+          data: {
+            key: 'AIzaSyA5QGk0Aszi91ubsph31l_NmGzzct6vL9s',
+            q: cityName,
+            part: 'snippet',
+            maxResults: 1,
+            type: 'video',
+            videoEmbeddable: true,
+          },
+          error: function (response) {
+            console.log("Request Failed");
+          }
+        }).then(function (response) {
+          console.log(response);
+        });
+
       });
     });
   </script>
