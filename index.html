@@ -44,9 +44,14 @@
 
   <div id="yelpArea"></div>
   <div id="youTubeArea"></div>
+  <iframe src=""></iframe>
+  <h3>Video Title</h3>
+  <p class="description">Video Description</p>
+
   <div id="itineraryArea"></div>
   <!-- JQuery -->
   <script src="https://code.jquery.com/jquery.js"></script>
+
   <!--JavaScript at end of body for optimized loading-->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
   <script>
@@ -90,7 +95,7 @@
               "Bearer 777OVHyUQXu4MD9WPwXQ3dub9jGslCwGt185TfYEQF6JoBa7tr7kjVe7OvbcNzwp2mY8k3JkODi2curLYOzJsG5dKxmQD8SzDYABjKEzUGC8i3Bk4vXHaU6P5G5DXnYx"
           },
           dataType: "json",
-          data: { term: "restaurant", location: cityName, limit: "5"}
+          data: { term: "restaurant", location: cityName, limit: "5" }
 
 
           // callback is not necessary
@@ -154,17 +159,24 @@
             part: 'snippet',
             maxResults: 1,
             type: 'video',
+            chart: 'mostPopular',
             videoEmbeddable: true,
           },
           error: function (response) {
-            console.log("Request Failed");
+            $("youTubeArea").append("<h5>Request Failed</h5>");
           }
         }).then(function (response) {
           console.log(response);
-        });
 
+          $('iframe').attr('src', 'https://www.youtube.com/embed/' + response.items[0].id.videoId);
+          $('h3').text(response.items[0].snippet.title);
+          $('.description').text(response.items[0].snippet.description);
+
+        });
       });
     });
+
+
   </script>
 </body>
 
