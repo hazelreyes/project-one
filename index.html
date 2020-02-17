@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--Firebase-->
+  <script src="https://www.gstatic.com/firebasejs/7.8.1/firebase-app.js"></script>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+  <!--Import materialize.css-->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css" />
+
+  <!--Import boostrap-->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
+
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+</head>
+
+<!--Main Body of App-->
+
+<body id="background">
+  <div class="jumbotron jumbotron-fluid">
+    <div class="container">
+      <h1 class="header">The Savvy Traveler</h1>
+      <p class="lead">
+        Enter your destination and see the possibilities...
+      </p>
+    </div>
+  </div>
+  <div class="container">
+    <h2>Destination City:</h2>
+
+    <div class="row">
+      <div class="input-field col s6">
+        <input id="city-input" type="text" class="validate" />
+      </div>
+    </div>
+    <button id="submitBtn" class="btn waves-effect waves-light" type="submit" name="action">
+      Search
+      <i class="material-icons right">send</i>
+    </button>
+  </div>
+
+  <div id="yelpArea"></div>
+  <div id="youTubeArea"></div>
+  <iframe src=""></iframe>
+  <h3>Video Title</h3>
+  <p class="description">Video Description</p>
+
+  <div id="itineraryArea"></div>
+  <!-- JQuery -->
+  <script src="https://code.jquery.com/jquery.js"></script>
+
+  <!--JavaScript at end of body for optimized loading-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    $(document).ready(function () {
+      //FIREBASE
+      var firebaseConfig = {
+        apiKey: "AIzaSyDv9dMSDCor976Qup3qF1USq3dSp14_o2E",
+        authDomain: "first-group-project-4f015.firebaseapp.com",
+        databaseURL: "https://first-group-project-4f015.firebaseio.com",
+        projectId: "first-group-project-4f015",
+        storageBucket: "first-group-project-4f015.appspot.com",
+        messagingSenderId: "1061347447826",
+        appId: "1:1061347447826:web:95b80b9ddc87a63ddd74cb",
+        measurementId: "G-3TR0M63K7P"
+      };
+
+      //Firebase initialize
+      firebase.initializeApp(firebaseConfig);
+
+
+      //Capture Button Click
+      $("#submitBtn").on("click", function (event) {
+        event.preventDefault();
+
+        $("#yelpArea").html("");
+
+        cityName = $("#city-input")
+          .val()
+          .trim();
+
+
+        $.ajax({
+          url:
+            "https://cors-anywhere.herokuapp.com/https://api.yelp.com/v3/businesses/search",
+          method: "GET",
+          error: function (error) {
+            console.log("error", error);
+          },
+          headers: {
+            Authorization:
+              "Bearer 777OVHyUQXu4MD9WPwXQ3dub9jGslCwGt185TfYEQF6JoBa7tr7kjVe7OvbcNzwp2mY8k3JkODi2curLYOzJsG5dKxmQD8SzDYABjKEzUGC8i3Bk4vXHaU6P5G5DXnYx"
+          },
+          dataType: "json",
+          data: { term: "restaurant", location: cityName, limit: "5" }
+
+
+          // callback is not necessary
+        }).then(function (response) {
+
+          console.log(response);
+
+          // Grab the results from the API JSON return
+          var totalresults = response.total;
+          // If our results are greater than 0, continue
+          if (totalresults > 0) {
+            // Display a header on the page with the number of results
+
+            // Itirate through the JSON array of 'businesses' which was returned by the API
+            $.each(response.businesses, function (i, item) {
+              // Store each business's object in a variable
+              var phone = item.display_phone;
+              var image = item.image_url;
+              var name = item.name;
+              var rating = item.rating;
+              var reviewcount = item.review_count;
+              var address = item.location.address1;
+              var city = item.location.city;
+              var state = item.location.state;
+              var zipcode = item.location.zip_code;
+              // Append our result into our page
+              $("#yelpArea").append(
+                '<div id="yelpInfo" style="margin-top:50px;margin-bottom:50px;"><img src="' +
+                image +
+                '" style="width:200px;height:150px;"><br>We found <b>' +
+                name +
+                "</b><br> Located at: " +
+                address +
+                " " +
+                city +
+                ", " +
+                state +
+                " " +
+                zipcode +
+                "<br>The phone number for this business is: " +
+                phone +
+                "<br>This business has a rating of " +
+                rating +
+                " with " +
+                reviewcount +
+                " reviews.</div>"
+              );
+            });
+          } else {
+            // If our results are 0; no businesses were returned by the JSON therefor we display on the page no results were found
+            $("#yelpArea").append("<h5>We discovered no results!</h5>");
+          }
+        });
+
+        $.ajax({
+          type: 'GET',
+          url: 'https://www.googleapis.com/youtube/v3/search',
+          data: {
+            key: 'AIzaSyA5QGk0Aszi91ubsph31l_NmGzzct6vL9s',
+            q: cityName,
+            part: 'snippet',
+            maxResults: 1,
+            type: 'video',
+            chart: 'mostPopular',
+            videoEmbeddable: true,
+          },
+          error: function (response) {
+            $("youTubeArea").append("<h5>Request Failed</h5>");
+          }
+        }).then(function (response) {
+          console.log(response);
+
+          $('iframe').attr('src', 'https://www.youtube.com/embed/' + response.items[0].id.videoId);
+          $('h3').text(response.items[0].snippet.title);
+          $('.description').text(response.items[0].snippet.description);
+
+        });
+      });
+    });
+
+
+  </script>
+</body>
+
+</html>
