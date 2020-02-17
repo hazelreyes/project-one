@@ -6,10 +6,15 @@ body {
 main {
   flex: 1 0 auto;
 }
-.logo {
+.brand-logo {
   font-size: 15px;
   text-align: left;
   flex-direction: column;
+  margin-left: 10px;
+}
+.sidenav {
+  background-color: rgb(8, 145, 122);
+  color: gray;
 }
 #background {
   background-color: lightgoldenrodyellow;
@@ -21,9 +26,9 @@ main {
   width: auto;
   height: auto;
 }
-  .slider .btn {
-    margin-top: 20px;
-  }
+.slider .btn {
+  margin-top: 20px;
+}
 #img {
   display: block;
   margin-left: auto;
@@ -39,9 +44,14 @@ main {
   color: rgb(234, 241, 243);
 }
 .dest {
+  margin-top: 40px;
   font-family: "Open Sans", sans-serif;
   font-size: 25px;
   color: rgb(34, 33, 33);
+}
+#modal1 {
+  background-color: rgb(8, 145, 122);
+  font-family: "Open Sans", sans-serif;
 }
 #yelpArea {
   display: center;
@@ -50,7 +60,8 @@ main {
   font-family: "Sriracha", cursive;
   font-weight: 500;
   font-size: 30px;
-  text-align: center;
+  margin-top: 30px;
+  text-align: left;
   color: rgb(31, 30, 30);
 }
 #videoHeader {
@@ -60,12 +71,39 @@ main {
   text-align: center;
   color: rgb(31, 30, 30);
 }
-
-footer{
-
-  background-color: teal;
+#iframe {
+  margin-top: 40px;
+}
+#itineraryArea {
+  margin-top: 100px;
+}
+.card-header {
+  padding: 10px;
+  font-weight: bold;
+}
+.deleteButton {
+  vertical-align: middle;
+}
+footer {
+  background-color: rgb(8, 145, 122);
+  margin-top: 50px;
   text-align: center;
   color: white;
   font-family: "Open Sans", sans-serif;
   width: 100%;
+}
+@media screen and (max-width: 600px) {
+  a.brand-logo {
+    font-size: 22px;
+  }
+}
+@media screen and (max-width: 380px) {
+  a.brand-logo {
+    font-size: 17px;
+  }
+}
+@media screen and (max-width: 315px) {
+  a.brand-logo {
+    font-size: 14px;
+  }
 }
