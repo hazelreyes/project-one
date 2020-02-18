@@ -13,12 +13,12 @@ main {
   margin-left: 10px;
 }
 .sidenav {
-  background-color: rgb(8, 145, 122);
+  background-color: #00897b;
   color: gray;
 }
 #background {
   background-color: lightgoldenrodyellow;
-  background-image: url("Assets/Images/backgroundPineapple.jpeg");
+  background-image: url("Images/backgroundPineapple.jpeg");
   background-repeat: no-repeat;
   background-attachment: scroll;
   background-size: cover;
@@ -50,13 +50,16 @@ main {
   color: rgb(34, 33, 33);
 }
 #modal1 {
-  background-color: rgb(8, 145, 122);
+  background-color: #00897b;
+  background-image: url("Images/city.jpg");
+  background-repeat: no-repeat;
+  background-size: cover;
   font-family: "Open Sans", sans-serif;
 }
 #yelpArea {
   display: center;
 }
-.rev {
+.header {
   font-family: "Sriracha", cursive;
   font-weight: 500;
   font-size: 30px;
@@ -89,7 +92,7 @@ main {
   vertical-align: middle;
 }
 footer {
-  background-color: rgb(8, 145, 122);
+  background-color: #00897b;
   margin-top: 50px;
   text-align: center;
   color: white;
@@ -100,14 +103,26 @@ footer {
   a.brand-logo {
     font-size: 22px;
   }
+  #iframe{
+    width: "420";
+    height: "340";
+  }
 }
 @media screen and (max-width: 380px) {
   a.brand-logo {
     font-size: 17px;
   }
+  #iframe{
+    width: "350";
+    height: "260";
+  }
 }
 @media screen and (max-width: 315px) {
   a.brand-logo {
     font-size: 14px;
+  }
+  #iframe{
+    width: "290";
+    height: "235";
   }
 }

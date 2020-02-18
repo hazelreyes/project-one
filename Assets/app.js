@@ -1,6 +1,6 @@
 $(document).ready(function () {
     $('iframe').hide();
-    $(".rev").hide();
+    $(".header").hide();
     $("#instructions").hide();
     $("#videoHeader").hide();
 
@@ -17,6 +17,7 @@ $(document).ready(function () {
                 $("<td>").text(itineraries[i].zipCode));
             var deleteIcon = $("<i>")
                 .addClass("material-icons")
+                .attr("data-itinerary", i)
                 .text("delete");
             newRow = newRow.append('<br/>').append(deleteIcon);
             $("#itinerary-table").append(newRow);
@@ -29,11 +30,17 @@ $(document).ready(function () {
     if (!itineraries) {
         itineraries = [];
     }
+
+    $("#city-input").keydown(function (e) {
+        if (e.which === 13) {
+            $("#submitBtn").click();
+        }
+    });
     //calls renderItineraries function
     renderItineraries(itineraries);
-
     $("#submitBtn").on("click", function (event) {
         event.preventDefault();
+        $('iframe').attr("");
         $("#yelpArea").html("");
         $("#youTubeArea").html("");
         cityName = $("#city-input")
@@ -41,9 +48,10 @@ $(document).ready(function () {
             .trim();
         if (cityName === "") {
             $('.modal').modal();
-        } else if (cityName !== "") {
+            $('.modal').modal('open');
+        } else {
             $('iframe').show();
-            $(".rev").show();
+            $(".header").show();
             $("#instructions").show();
             $("#videoHeader").show();
             $.ajax({
@@ -97,8 +105,8 @@ $(document).ready(function () {
                         restaurantDiv.append(phone);
                         restaurantDiv.append(ratingWithReviewCount);
                         restaurantDiv.addClass("waves-effect")
-                        .addClass("waves-teal")
-                        .addClass("waves-light");
+                            .addClass("waves-teal")
+                            .addClass("waves-light");
                         $("#yelpArea").append(restaurantDiv);
                     });
                 } else {
@@ -111,15 +119,14 @@ $(document).ready(function () {
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 data: {
                     key: 'AIzaSyBeqNJkinkCUFPlPWWbW6PUVPEo5jz6Bxc',
-                    q: cityName,
+                    q: cityName + 'restaurant' + 'food',
                     part: 'snippet',
                     maxResults: 1,
                     type: 'video',
-                    chart: 'mostPopular',
                     videoEmbeddable: true,
                 },
                 error: function (response) {
-                    $("#youTubeArea").append("<h5>Request Failed</h5>");
+                    $("#youTubeArea").append("<h5>Request Failed.</br> We apologize for the inconvenience.</h5>");
                 }
             }).then(function (response) {
                 console.log(response);
@@ -156,10 +163,10 @@ $(document).ready(function () {
     $(document).on("click", ".material-icons", function () {
         event.preventDefault();
         var toDoNumber = $(this).attr("data-itinerary");
-        itineraries[i].splice(toDoNumber, 1);
+        itineraries.splice(toDoNumber, 1);
         renderItineraries(itineraries);
         localStorage.setItem("itineraries", JSON.stringify(itineraries));
-    })
+    });
 });
 
 // Side Menu
