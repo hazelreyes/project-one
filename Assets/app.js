@@ -1,7 +1,9 @@
 $(document).ready(function () {
     $('iframe').hide();
     $(".rev").hide();
+    $("#instructions").hide();
     $("#videoHeader").hide();
+
     //function that adds itinerary row to the table
     function renderItineraries(itineraries) {
         $('#itinerary-table tbody').empty();
@@ -37,11 +39,12 @@ $(document).ready(function () {
         cityName = $("#city-input")
             .val()
             .trim();
-        if (!$('input:text').val()) {
+        if (cityName === "") {
             $('.modal').modal();
-        } else {
+        } else if (cityName !== "") {
             $('iframe').show();
             $(".rev").show();
+            $("#instructions").show();
             $("#videoHeader").show();
             $.ajax({
                 url:
@@ -93,17 +96,21 @@ $(document).ready(function () {
                         restaurantDiv.append(address);
                         restaurantDiv.append(phone);
                         restaurantDiv.append(ratingWithReviewCount);
+                        restaurantDiv.addClass("waves-effect")
+                        .addClass("waves-teal")
+                        .addClass("waves-light");
                         $("#yelpArea").append(restaurantDiv);
                     });
                 } else {
                     $("#yelpArea").append("<h5>We discovered no results!</h5>");
                 };
             });
+
             $.ajax({
                 type: 'GET',
                 url: 'https://www.googleapis.com/youtube/v3/search',
                 data: {
-                    key: 'AIzaSyA5QGk0Aszi91ubsph31l_NmGzzct6vL9s',
+                    key: 'AIzaSyBeqNJkinkCUFPlPWWbW6PUVPEo5jz6Bxc',
                     q: cityName,
                     part: 'snippet',
                     maxResults: 1,
@@ -112,7 +119,7 @@ $(document).ready(function () {
                     videoEmbeddable: true,
                 },
                 error: function (response) {
-                    $("youTubeArea").append("<h5>Request Failed</h5>");
+                    $("#youTubeArea").append("<h5>Request Failed</h5>");
                 }
             }).then(function (response) {
                 console.log(response);
@@ -149,7 +156,7 @@ $(document).ready(function () {
     $(document).on("click", ".material-icons", function () {
         event.preventDefault();
         var toDoNumber = $(this).attr("data-itinerary");
-        itineraries.splice(toDoNumber, 1);
+        itineraries[i].splice(toDoNumber, 1);
         renderItineraries(itineraries);
         localStorage.setItem("itineraries", JSON.stringify(itineraries));
     })
